@@ -11,6 +11,8 @@ set backspace=indent,eol,start
 "set list
 "set listchars=eol:⏎,tab:␉·,trail:␠,nbsp:⎵
 set list listchars=tab:»-,trail:·,extends:»,precedes:«
+"set guifont=等距更纱黑体_SC:h11:cGB2312:qCLEARTYPE
+set guifont=CaskaydiaCove\ NF\ Mono:h11:cGB2312:qCLEARTYPE
 set cursorline
 set hidden
 set mouse=a
