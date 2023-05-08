@@ -94,6 +94,7 @@ return require('packer').startup(function(use)
     }
     use 'nvim-telescope/telescope-fzf-native.nvim'
     use 'nvim-telescope/telescope-file-browser.nvim'
+    use 'smartpde/telescope-recent-files'
   else
     -- fzf
     use {

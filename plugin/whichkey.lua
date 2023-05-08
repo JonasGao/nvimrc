@@ -40,10 +40,11 @@ whichkey.register({
     b = { "<cmd>Telescope buffers<cr>", "buffers" },
     h = { "<cmd>Telescope help_tags<cr>", "help_tags" },
     v = { "<cmd>Telescope git_files<cr>", "git_files" },
-    e = { "<cmd>Telescope oldfiles<cr>", "oldfiles" },
     c = { "<cmd>Telescope commands<cr>", "commands" },
     H = { "<cmd>Telescope command_history<cr>", "command_history" },
-    r = { "<cmd>Telescope registers<cr>", "registers" },
+    R = { "<cmd>Telescope registers<cr>", "registers" },
     C = { "<cmd>Telescope colorscheme<cr>", "colorscheme" },
+    e = { "<cmd>Telescope oldfiles<cr>", "oldfiles" },
+    r = { "<cmd>lua require('telescope').extensions.recent_files.pick()<CR>", "recent_files" },
   }
 }, { prefix = "<leader>" })
