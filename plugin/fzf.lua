@@ -5,8 +5,11 @@ then
   telescope.setup({
     defaults = {
       mappings = {
+        n = {
+        },
         i = {
-          ["<C-h>"] = "which_key"
+          ["<C-h>"] = "which_key",
+          ["<C-d>"] = require('telescope.actions').delete_buffer
         }
       }
     },
