@@ -46,11 +46,12 @@ nnoremap  <Leader>r   :bro ol<CR>
 nnoremap  <Leader>n   :set nu! rnu!<CR>
 nnoremap  <Leader>w   :set wrap!<CR>
 nnoremap  <Leader>m   :set filetype=
+nnoremap  <Leader>Ss  :source $MYVIMRC<CR>
 " Switch buffer
 nnoremap  <Leader>h   :bp<CR>
 nnoremap  <Leader>l   :bn<CR>
 nnoremap  <Leader>bl  :ls<CR>
-nnoremap  <Leader>bd  :ls<CR>
+nnoremap  <Leader>bd  :bd<CR>
 nnoremap  <Leader>1   :b1<CR>
 nnoremap  <Leader>2   :b2<CR>
 nnoremap  <Leader>3   :b3<CR>
