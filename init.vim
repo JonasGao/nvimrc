@@ -31,6 +31,12 @@ set shiftwidth=2
 filetype plugin indent on
 syntax on
 
+""" For neovide
+if exists("g:neovide")
+  set guifont=CaskaydiaCove\ NF\ Mono:h12:i:#e-subpixelantialias:#h-none
+  let g:neovide_cursor_animation_length = 0.05
+endif
+
 """ Basic mapping
 nnoremap  dw  vb"_d
 nnoremap  <Space>a  ggvG$
