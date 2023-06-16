@@ -39,7 +39,7 @@ endif
 
 """ Basic mapping
 nnoremap  dw  vb"_d
-nnoremap  <Space>a  ggvG$
+nnoremap  <Space>a  gg0vG$
 nnoremap  te  :tabedit<Return>
 
 """ Leaders mapping
