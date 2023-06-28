@@ -3,7 +3,6 @@ local lspconfig = require 'lspconfig'
 require('vim.lsp.protocol')
 
 local on_attach = function(client, bufnr)
-
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- formatting
@@ -57,7 +56,7 @@ local lsp_flags = {
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-lspconfig.sumneko_lua.setup {
+lspconfig.lua_ls.setup {
   on_attach = on_attach,
   flags = lsp_flags,
   capabilities = capabilities,
