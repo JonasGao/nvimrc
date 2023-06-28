@@ -6,7 +6,6 @@ ts.setup {
   ensure_installed = {
     "lua",
     "vim",
-    "help",
     "java",
     "markdown",
     "tsx",
