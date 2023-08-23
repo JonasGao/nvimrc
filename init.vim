@@ -1,6 +1,6 @@
 set nu rnu
 set title
-set autochdir
+"set autochdir
 set background=dark
 set signcolumn=yes
 set ttimeoutlen=0
