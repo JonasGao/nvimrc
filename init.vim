@@ -86,6 +86,7 @@ inoremap	<C-p>d      <C-r>=system('date')<CR>
 """ Setup color
 if has('win32')
 	set termguicolors
+  set shell=pwsh
 elseif $TERM ==? 'xterm-256color'
 	set termguicolors
 endif
