@@ -18,7 +18,7 @@ vim.keymap.set('n', 'gd',  '<Cmd>Lspsaga lsp_finder<CR>', opts)
 vim.keymap.set('n', 'K',   '<Cmd>Lspsaga hover_doc<CR>', opts)
 vim.keymap.set('n', 'gp',  '<Cmd>Lspsaga peek_definition<CR>', opts)
 vim.keymap.set('n', 'gr',  '<Cmd>Lspsaga rename<CR>', opts)
-vim.keymap.set('n', 'gca', '<Cmd>Lspsaga code_action<CR>', opts)
+vim.keymap.set('n', '.ca', '<Cmd>Lspsaga code_action<CR>', opts)
 
 -- code action
 local codeaction = require("lspsaga.codeaction")

@@ -83,10 +83,8 @@ lspconfig.lua_ls.setup {
   },
 }
 
-local pses_path = vim.fn.expand('$HOME/PowerShellEditorServices')
 lspconfig.powershell_es.setup {
   on_attach = on_attach,
-  bundle_path = pses_path,
   flags = lsp_flags,
   capabilities = capabilities,
 }
@@ -96,7 +94,6 @@ lspconfig.bashls.setup {
   capabilities = capabilities,
 }
 
-local vimls_path = vim.fn.expand('$LOCALAPPDATA/vim-lsp-settings/servers/vim-language-server/vim-language-server.cmd')
 lspconfig.vimls.setup {
   -- The lspconfig server_configuration.md provider:
   --   1. runtimepath
@@ -107,5 +104,4 @@ lspconfig.vimls.setup {
   -- like "cmd_cwd = vimls_path"
   -- But, we dont know if there are any side effects
   -- Or we can set "cmd" directly
-  cmd = { 'cmd.exe', '/C', vimls_path, '--stdio' }
 }

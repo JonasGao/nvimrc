@@ -9,7 +9,11 @@ return require('packer').startup(function(use)
   }
 
   -- LSP and Diagnostic
-  use 'neovim/nvim-lspconfig'
+  use {
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
+    'neovim/nvim-lspconfig'
+  }
   use {
     'folke/trouble.nvim',
     requires = "kyazdani42/nvim-web-devicons",
