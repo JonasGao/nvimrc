@@ -13,7 +13,7 @@ local on_attach = function(client, bufnr)
     api.nvim_create_autocmd("BufWritePre", {
       group = augroup,
       buffer = bufnr,
-      callback = function ()
+      callback = function()
         vim.lsp.buf.formatting_seq_sync()
       end
     })
