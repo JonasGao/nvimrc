@@ -9,10 +9,18 @@ local on_attach = function(client, bufnr)
   -- this will be update reference project 'lspconfig'
   if client.server_capabilities.documentFormattingProvider then
     local api = vim.api
-    api.nvim_command [[augroup Format]]
-    api.nvim_command [[autocmd! * <buffer>]]
-    api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
-    api.nvim_command [[augroup END]]
+    local augroup = api.nvim_create_augroup("LspFormatting", {})
+    api.nvim_create_autocmd("BufWritePre", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function ()
+        vim.lsp.buf.formatting_seq_sync()
+      end
+    })
+    -- api.nvim_command [[augroup Format]]
+    -- api.nvim_command [[autocmd! * <buffer>]]
+    -- api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
+    -- api.nvim_command [[augroup END]]
   end
 
   local opts = { noremap = true, silent = true }
