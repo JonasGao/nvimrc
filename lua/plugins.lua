@@ -3,6 +3,18 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
+  -- Improvements UI
+  use {
+    "stevearc/dressing.nvim"
+  }
+
+  -- Notification
+  use {
+    "MunifTanjim/nui.nvim",
+    "rcarriga/nvim-notify",
+    "folke/noice.nvim"
+  }
+
   -- Which key
   use {
     "folke/which-key.nvim"
@@ -55,7 +67,7 @@ return require('packer').startup(function(use)
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
-  use 'L3MON4D3/LuaSnip' -- Snippets plugin
+  use 'L3MON4D3/LuaSnip'         -- Snippets plugin
   -- Github Copilot
   -- use 'github/copilot.vim'
   use {
@@ -82,7 +94,9 @@ return require('packer').startup(function(use)
   }
 
   -- Show indent line
-  -- use 'lukas-reineke/indent-blankline.nvim'
+  use {
+    'lukas-reineke/indent-blankline.nvim'
+  }
 
   -- Fuzzy finder
   if vim.fn.has('win32') == 1
@@ -107,5 +121,4 @@ return require('packer').startup(function(use)
     }
     use 'junegunn/fzf.vim'
   end
-
 end)
