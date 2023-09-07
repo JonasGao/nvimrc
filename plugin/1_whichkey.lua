@@ -32,19 +32,3 @@ whichkey.setup {
   },
 }
 
-whichkey.register({
-  f = {
-    name = "Fuzzy Finder",
-    f = { "<cmd>Telescope find_files<cr>", "find_files" },
-    g = { "<cmd>Telescope live_grep<cr>", "live_grep" },
-    b = { "<cmd>Telescope buffers<cr>", "buffers" },
-    h = { "<cmd>Telescope help_tags<cr>", "help_tags" },
-    v = { "<cmd>Telescope git_files<cr>", "git_files" },
-    c = { "<cmd>Telescope commands<cr>", "commands" },
-    H = { "<cmd>Telescope command_history<cr>", "command_history" },
-    R = { "<cmd>Telescope registers<cr>", "registers" },
-    C = { "<cmd>Telescope colorscheme<cr>", "colorscheme" },
-    e = { "<cmd>Telescope oldfiles<cr>", "oldfiles" },
-    r = { "<cmd>lua require('telescope').extensions.recent_files.pick()<CR>", "recent_files" },
-  }
-}, { prefix = "<leader>" })
