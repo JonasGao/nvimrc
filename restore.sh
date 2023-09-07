@@ -5,16 +5,13 @@ PACK_HOME="$NVIM_CONF_HOME/pack"
 PACK_START="$PACK_HOME/dist/start"
 SCRIPT_NAME="$0"
 
-if [ -z "$MY_CONFIG_HOME" ]
-then
-  echo "NO MY_CONFIG_HOME"
-  exit 1
-fi
-
-mkdir -p "$HOME/.config/nvim/"
-
 usage() {
-  echo "Usage: $SCRIPT_NAME [-arpch]" >&2
+  printf """Usage: $SCRIPT_NAME [-apdh]
+  a all
+  p packer
+  d dependencies
+  b build telescope fzf
+  """ >&2
   exit 2
 }
 
@@ -29,13 +26,6 @@ set_variable() {
   fi
 }
 
-restore_rcfile() {
-  SRC="$MY_CONFIG_HOME/vim/nvim/init.vim"
-  DST="$HOME/.config/nvim/init.vim"
-  cp "$SRC" "$DST"
-  printf "\033[0;32mRestore from %s to %s.\033[0m\n" "$SRC" "$DST"
-}
-
 install_packer() {
   D="$PACK_START/packer.nvim"
   if [ -d "$D" ]
@@ -46,41 +36,27 @@ install_packer() {
   git clone https://github.com/wbthomason/packer.nvim "$D"
 }
 
-restore_conf() {
-  N="$MY_CONFIG_HOME/vim/nvim"
-  L="$N/lua"
-  P="$N/plugin"
-  F="$N/after"
-  cp -R $L "$NVIM_CONF_HOME/"
-  cp -R $P "$NVIM_CONF_HOME/"
-  cp -R $F "$NVIM_CONF_HOME/"
-  printf "\033[0;32mRestore config files.\033[0m\n"
+install_dependencies() {
+  pamac install ripgrep cmake gcc bat fd
 }
 
-install_dependencies() {
-  # For telescope-fzf-native
-  scoop install cmake
-  # For treesitter
-  scoop install gcc
-  # For lsp
-  scoop install lua-language-server
-  # Maybe for telescope preview
-  scoop install bat
-
-  Build-TelescopeFzfNative
+build_telescope_fzf() {
+  pushd "$HOME/.local/share/nvim/site/pack/packer/start/telescope-fzf-native.nvim"
+  cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build
+  popd
 }
 
 ###########################
 # Main script starts here
 
 unset ACTION
-while getopts "arpc?h" OPT
+while getopts "apdb?h" OPT
 do
   case "$OPT" in
     a) set_variable ACTION all ;;
-    r) set_variable ACTION restore_rcfile ;;
-    c) set_variable ACTION restore_conf ;;
     p) set_variable ACTION install_packer ;;
+    d) set_variable ACTION install_dependencies ;;
+    b) set_variable ACTION build_telescope_fzf ;;
     h|?) usage ;;
   esac
 done
