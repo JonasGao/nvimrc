@@ -19,3 +19,10 @@ noice.setup({
     lsp_doc_border = false,       -- add a border to hover docs and signature help
   },
 })
+
+local notify_ready, notify = pcall(require, 'notify')
+if (not notify_ready) then return end
+
+notify.setup({
+  background_colour = "#000000"
+})
