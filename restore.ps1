@@ -17,6 +17,12 @@ function Install-Packer
 
 function Install-Dependency
 {
+  if (-not (Get-Command scoop))
+  {
+    Write-Host "Not found command scoop. Will install scoop."
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+    Invoke-RestMethod get.scoop.sh | Invoke-Expression
+  }
   if ($HttpProxy)
   {
     Write-Host "Config scoop using proxy: http://$HttpProxy"
