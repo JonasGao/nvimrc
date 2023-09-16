@@ -2,7 +2,7 @@ param(
   [switch]$Packer,
   [switch]$Dependency,
   [switch]$BuildFzf,
-  $HttpProxy
+  [string]$HttpProxy
 )
 
 function Install-Packer
@@ -47,6 +47,10 @@ function Install-Dependency
     }
     try
     {
+      if (-not (Get-Command npm))
+      {
+        scoop install nodejs-lts
+      }
       npm install -g tree-sitter-cli
     } finally
     {
