@@ -24,7 +24,8 @@ return require('packer').startup(function(use)
   use {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
-    'neovim/nvim-lspconfig'
+    'neovim/nvim-lspconfig',
+    'j-hui/fidget.nvim'
   }
   use {
     'folke/trouble.nvim',
