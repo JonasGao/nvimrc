@@ -21,7 +21,7 @@ cd "$env:LOCALAPPDATA\nvim"
 ```
 
 Startup neovim, run `PackerInstall`.
-After install vc++ build tools ( or visual studio, containe vc++ build tools ). run `.\install.ps1 -BuildFzf` build 'telescope navtive fzf'.
+After install vc++ build tools ( or visual studio, containe vc++ build tools ). run `.\install.ps1 -BuildFzf` in "Developer Powershell for VS 20XX" build 'telescope navtive fzf'.
 
 
 
