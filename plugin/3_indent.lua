@@ -1,4 +1,4 @@
-local ready, indent = pcall(require, 'indent_blankline')
+local ready, ibl = pcall(require, 'ibl')
 if (not ready) then return end
 
 -- vim.g.indent_blankline_char = '|'
@@ -12,10 +12,5 @@ local styles = colorbuddy.styles
 Color.new('nice', '#222222')
 Group.new('MyIndentBlankline', colors.nice, colors.none, styles.NONE)
 
-indent.setup {
-  show_current_context = true,
-  show_current_context_start = true,
-  char_highlight_list = {
-    "MyIndentBlankline"
-  }
+ibl.setup {
 }
