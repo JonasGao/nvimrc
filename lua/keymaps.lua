@@ -41,6 +41,7 @@ wk.register({
     d = { "<cmd>bd<cr>", "Delete current" },
     h = { "<cmd>bp<cr>", "Prev buffer" },
     l = { "<cmd>bn<cr>", "Next buffer" },
+    s = { "<cmd>w<cr>", "Save" },
   },
   z = {
     name = "+FlodMethod",
