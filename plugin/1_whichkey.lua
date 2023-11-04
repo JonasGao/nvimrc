@@ -31,4 +31,3 @@ whichkey.setup {
     filetypes = { "TelescopePrompt" },
   },
 }
-
