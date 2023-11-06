@@ -119,4 +119,9 @@ return require('packer').startup(function(use)
   --   run = ":call fzf#install()"
   -- }
   -- use 'junegunn/fzf.vim'
+
+  -- Scrollview
+  use {
+    'dstein64/nvim-scrollview'
+  }
 end)
