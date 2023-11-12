@@ -50,6 +50,7 @@ wk.register({
     i = { "<cmd>set foldmethod=indent<cr>", "Indent" },
     m = { "<cmd>set foldmethod=manual<cr>", "Manual" },
     k = { "<cmd>set foldmethod=marker<cr>", "Marker" },
+    q = { "<cmd>set foldmethod<cr>", "Query current" }
   },
   ["1"] = { "<cmd>b1<cr>", "Buffer 1" },
   ["2"] = { "<cmd>b2<cr>", "Buffer 2" },
