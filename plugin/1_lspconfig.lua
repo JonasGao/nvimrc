@@ -38,7 +38,8 @@ local on_attach = function(client, bufnr)
     vim.keymap.set(mode, key, cmd, o)
   end
 
-  buf_map('n', '<space>b', vim.lsp.buf.declaration, "Goto Declaration")
+  buf_map('n', '<space>b', vim.lsp.buf.definition, "Goto Definition")
+  buf_map('n', '<space><C-b>', vim.lsp.buf.declaration, "Goto Declaration")
   buf_map('n', '<space>B', vim.lsp.buf.implementation, "Goto Implementation")
 
   -- Instead by lspsaga
