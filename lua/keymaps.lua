@@ -7,6 +7,8 @@ end
 map("n", "te", ":tabedit<cr>")
 map("n", "<Space>a", "gg0vG$")
 map("i", "<C-p>d", "<C-r>=system('date')<CR>")
+map("n", "<space>l", ":bn", "Next Buffer")
+map("n", "<space>h", ":bp", "Prev Buffer")
 
 local wk = require("which-key")
 wk.register({
