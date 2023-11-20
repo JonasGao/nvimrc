@@ -28,10 +28,10 @@ local on_attach = function(client, bufnr)
     vim.keymap.set(mode, key, cmd, o)
   end
 
-  map('n', '<space>e', vim.diagnostic.open_float)
+  map('n', '<space>e', vim.diagnostic.open_float, "diagnostic.open_float")
   map('n', '[d', vim.diagnostic.goto_prev, "Prev Problom")
   map('n', ']d', vim.diagnostic.goto_next, "Next Problom")
-  map('n', '<space>q', vim.diagnostic.setloclist)
+  map('n', '<space>q', vim.diagnostic.setloclist, "diagnostic.setloclist")
 
   local function buf_map(mode, key, cmd, desc)
     local o = { noremap = true, silent = true, desc = desc, buffer = bufnr }
@@ -41,6 +41,10 @@ local on_attach = function(client, bufnr)
   buf_map('n', '<space>b', vim.lsp.buf.definition, "Goto Definition")
   buf_map('n', '<space><C-b>', vim.lsp.buf.declaration, "Goto Declaration")
   buf_map('n', '<space>B', vim.lsp.buf.implementation, "Goto Implementation")
+  buf_map('n', '<space>D', vim.lsp.buf.type_definition, "Goto Type Definition")
+  buf_map('n', '<space>r', vim.lsp.buf.references, "References")
+  buf_map('n', '<space>f', function() vim.lsp.buf.format { async = true } end, "Format")
+  buf_map('n', '<space>c', vim.lsp.buf.code_action, "Code action")
 
   -- Instead by lspsaga
   -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
@@ -51,12 +55,7 @@ local on_attach = function(client, bufnr)
   buf_map('n', '<space>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end)
-  buf_map('n', '<space>D', vim.lsp.buf.type_definition)
-  buf_map('n', '<space>rn', vim.lsp.buf.rename)
-  buf_map('n', '<space>ca', vim.lsp.buf.code_action)
-  -- Instead by lspsaga
-  -- vim.keymap.set('n', 'gr', vim.lsp.buf.references)
-  buf_map('n', '<space>f', function() vim.lsp.buf.format { async = true } end)
+  buf_map('n', '<space>R', vim.lsp.buf.rename)
 end
 
 vim.diagnostic.config({
