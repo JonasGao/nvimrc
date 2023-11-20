@@ -15,7 +15,7 @@ wk.register({
   x = { "<cmd>set paste!<cr>", "Set paste mode" },
   r = { "<cmd>bro ol<cr>" },
   i = {
-    name = "+Install",
+    name = "+Insert",
     d = { "<cmd>r!date<cr>", "+Date" },
   },
   n = {

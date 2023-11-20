@@ -23,30 +23,39 @@ local on_attach = function(client, bufnr)
     -- api.nvim_command [[augroup END]]
   end
 
-  local opts = { noremap = true, silent = true }
-  vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-  vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+  local function map(mode, key, cmd, desc)
+    local o = { noremap = true, silent = true, desc = desc }
+    vim.keymap.set(mode, key, cmd, o)
+  end
 
-  local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  map('n', '<space>e', vim.diagnostic.open_float)
+  map('n', '[d', vim.diagnostic.goto_prev, "Prev Problom")
+  map('n', ']d', vim.diagnostic.goto_next, "Next Problom")
+  map('n', '<space>q', vim.diagnostic.setloclist)
+
+  local function buf_map(mode, key, cmd, desc)
+    local o = { noremap = true, silent = true, desc = desc, buffer = bufnr }
+    vim.keymap.set(mode, key, cmd, o)
+  end
+
+  buf_map('n', '<space>b', vim.lsp.buf.declaration, "Goto Declaration")
+  buf_map('n', '<space>B', vim.lsp.buf.implementation, "Goto Implementation")
+
   -- Instead by lspsaga
-  -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wl', function()
+  -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
+  -- vim.keymap.set('n', 'K', vim.lsp.buf.hover)
+  buf_map('n', '<C-k>', vim.lsp.buf.signature_help)
+  buf_map('n', '<space>wa', vim.lsp.buf.add_workspace_folder)
+  buf_map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder)
+  buf_map('n', '<space>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  end)
+  buf_map('n', '<space>D', vim.lsp.buf.type_definition)
+  buf_map('n', '<space>rn', vim.lsp.buf.rename)
+  buf_map('n', '<space>ca', vim.lsp.buf.code_action)
   -- Instead by lspsaga
-  -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+  -- vim.keymap.set('n', 'gr', vim.lsp.buf.references)
+  buf_map('n', '<space>f', function() vim.lsp.buf.format { async = true } end)
 end
 
 vim.diagnostic.config({
