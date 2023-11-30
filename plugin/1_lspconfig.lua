@@ -1,7 +1,24 @@
 local lspconfig = require 'lspconfig'
+local mason = require("mason-lspconfig")
 
 require('vim.lsp.protocol')
 
+vim.diagnostic.config({
+  update_in_insert = true,
+  float = {
+    source = "always"
+  }
+})
+
+local lsp_flags = {
+  -- This is the default in Nvim 0.7+
+  debounce_text_changes = 150,
+}
+
+-- Add additional capabilities supported by nvim-cmp
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+-- Lsp Setup attact
 local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -58,67 +75,48 @@ local on_attach = function(client, bufnr)
   buf_map('n', '<space>R', vim.lsp.buf.rename)
 end
 
-vim.diagnostic.config({
-  update_in_insert = true,
-  float = {
-    source = "always"
-  }
-})
-
-local lsp_flags = {
-  -- This is the default in Nvim 0.7+
-  debounce_text_changes = 150,
-}
-
--- Add additional capabilities supported by nvim-cmp
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-lspconfig.lua_ls.setup {
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
+mason.setup_handlers {
+  -- The first entry (without a key) will be the default handler
+  -- and will be called for each installed server that doesn't have
+  -- a dedicated handler.
+  function(server_name) -- default handler (optional)
+    lspconfig[server_name].setup {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+    }
+  end,
+  -- Next, you can provide a dedicated handler for specific servers.
+  -- For example, a handler override for the `rust_analyzer`:
+  ["rust_analyzer"] = function()
+    require("rust-tools").setup {}
+  end,
+  ["lua_ls"] = function()
+    lspconfig.lua_ls.setup {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          runtime = {
+            -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+            version = 'LuaJIT',
+          },
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = { 'vim' },
+          },
+          workspace = {
+            -- Make the server aware of Neovim runtime files
+            library = vim.api.nvim_get_runtime_file("", true),
+            checkThirdParty = false
+          },
+          -- Do not send telemetry data containing a randomized but unique identifier
+          telemetry = {
+            enable = false,
+          },
+        },
       },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = { 'vim' },
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-}
-
-lspconfig.powershell_es.setup {
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-}
-
-lspconfig.bashls.setup {
-  flags = lsp_flags,
-  capabilities = capabilities,
-}
-
-lspconfig.vimls.setup {
-  -- The lspconfig server_configuration.md provider:
-  --   1. runtimepath
-  --   2. vimruntime
-  -- But, all they are not work.
-  -- From nvim-lspconfig sourcecode, i found cmd_cwd option. And it works.
-  -- See here https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/util.lua#297
-  -- like "cmd_cwd = vimls_path"
-  -- But, we dont know if there are any side effects
-  -- Or we can set "cmd" directly
+    }
+  end
 }
