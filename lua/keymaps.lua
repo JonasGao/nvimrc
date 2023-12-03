@@ -54,6 +54,13 @@ wk.register({
     k = { "<cmd>set foldmethod=marker<cr>", "Marker" },
     q = { "<cmd>set foldmethod<cr>", "Query current" }
   },
+  q = {
+    name = "+EasyMotion",
+    s = { "<Plug>(easymotion-s2)", "2-Char Search" },
+    t = { "<Plug>(easymotion-t2)", "2-Char Search (T)" },
+    j = { "<Plug>(easymotion-j)", "J motion" },
+    k = { "<Plug>(easymotion-k)", "K motion" }
+  },
   ["1"] = { "<cmd>b1<cr>", "Buffer 1" },
   ["2"] = { "<cmd>b2<cr>", "Buffer 2" },
   ["3"] = { "<cmd>b3<cr>", "Buffer 3" },

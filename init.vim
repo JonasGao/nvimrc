@@ -47,17 +47,9 @@ endif
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 
-""" 最后加载一个本地自定义
-"runtime vimrc
-
-""" EasyMotion
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_smartcase = 1
-nnoremap 	ma 	<Plug>(easymotion-overwin-f)
-nnoremap 	ms 	<Plug>(easymotion-overwin-f2)
-nnoremap 	mj 	<Plug>(easymotion-j)
-nnoremap 	mk 	<Plug>(easymotion-k)
-
 """ Load Packer
 lua require('plugins')
 lua require('keymaps')
+
+""" EasyMotion
+runtime easymotion.vim
