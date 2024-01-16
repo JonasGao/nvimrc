@@ -118,5 +118,22 @@ mason.setup_handlers {
         },
       },
     }
-  end
+  end,
+  ["yamlls"] = function()
+    lspconfig.yamlls.setup {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      settings = {
+        yaml = {
+          format = {
+            enable = true
+          },
+          schemaStore = {
+            enable = true
+          }
+        }
+      }
+    }
+  end,
 }
