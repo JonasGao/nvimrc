@@ -121,7 +121,10 @@ mason.setup_handlers {
   end,
   ["yamlls"] = function()
     lspconfig.yamlls.setup {
-      on_attach = on_attach,
+      on_attach = function(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = true
+        on_attach(client, bufnr)
+      end,
       flags = lsp_flags,
       capabilities = capabilities,
       settings = {

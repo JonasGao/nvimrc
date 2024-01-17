@@ -39,9 +39,6 @@ endif
 
 """ Setup color
 set termguicolors
-if has('win32')
-  set shell=pwsh
-endif
 
 """ Italics
 let &t_ZH="\e[3m"
@@ -53,3 +50,4 @@ lua require('keymaps')
 
 """ EasyMotion
 runtime easymotion.vim
+
