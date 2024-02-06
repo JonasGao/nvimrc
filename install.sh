@@ -4,6 +4,7 @@ NVIM_CONF_HOME="$HOME/.config/nvim"
 PACK_HOME="$NVIM_CONF_HOME/pack"
 PACK_START="$PACK_HOME/dist/start"
 SCRIPT_NAME="$0"
+[ -z "$PACKER" ] && PACKER="pacman"
 
 usage() {
   printf """Usage: $SCRIPT_NAME [-apdh]
@@ -37,13 +38,16 @@ install_packer() {
 }
 
 install_dependencies() {
-  pamac install ripgrep cmake gcc bat fd
+  #$PACKER install ripgrep cmake gcc bat fd
+  #Case my mackbook is too old, homebrew not support install these tools
+  echo "Please manually install tools: ripgrep and fd, bat"
+  echo "Please install compile dependencies: cmake & gcc"
 }
 
 build_telescope_fzf() {
-  pushd "$HOME/.local/share/nvim/site/pack/packer/start/telescope-fzf-native.nvim"
+  pushd "$HOME/.local/share/nvim/site/pack/packer/start/telescope-fzf-native.nvim" || exit 5
   cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build
-  popd
+  popd || exit 6
 }
 
 ###########################
