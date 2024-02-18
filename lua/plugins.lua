@@ -103,7 +103,8 @@ return require('packer').startup(function(use)
 
   -- Show indent line
   use {
-    'lukas-reineke/indent-blankline.nvim'
+    'lukas-reineke/indent-blankline.nvim',
+    requires = 'tjdevries/colorbuddy.nvim'
   }
 
   -- Fuzzy finder
