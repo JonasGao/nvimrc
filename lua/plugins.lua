@@ -42,10 +42,13 @@ return require('packer').startup(function(use)
   }
 
   -- Colorschema
+  --[[
   use {
     'svrana/neosolarized.nvim',
     requires = 'tjdevries/colorbuddy.nvim'
   }
+  ]]
+  use { 'Tsuzat/NeoSolarized.nvim' }
 
   -- Statusline
   use {
