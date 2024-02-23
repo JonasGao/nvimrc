@@ -15,7 +15,7 @@ wk.register({
   y = { "\"*y", "Yank" },
   p = { "\"*p", "Paste", mode = { "n", "v" } },
   x = { "<cmd>set paste!<cr>", "Set paste mode" },
-  r = { "<cmd>bro ol<cr>" },
+  r = { ":%s/", "Replace" },
   i = {
     name = "+Insert",
     d = { "<cmd>r!date<cr>", "+Date" },
@@ -60,6 +60,10 @@ wk.register({
     t = { "<Plug>(easymotion-t2)", "2-Char Search (T)" },
     j = { "<Plug>(easymotion-j)", "J motion" },
     k = { "<Plug>(easymotion-k)", "K motion" }
+  },
+  B = {
+    name = "+Browser",
+    r = { "<cmd>bro ol<cr>", "Old files" },
   },
   ["1"] = { "<cmd>b1<cr>", "Buffer 1" },
   ["2"] = { "<cmd>b2<cr>", "Buffer 2" },
