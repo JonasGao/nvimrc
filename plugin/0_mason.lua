@@ -6,7 +6,7 @@ if (not mason_lspconfig_ready) then return end
 
 mason.setup({
   github = {
-    download_url_template = "https://ghps.cc/https://github.com/%s/releases/download/%s/%s"
+    download_url_template = "https://github.com/%s/releases/download/%s/%s"
   }
 })
 mason_lspconfig.setup()
