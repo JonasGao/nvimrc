@@ -44,6 +44,9 @@ set termguicolors
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 
+""" Load env
+runtime env.local.vim
+
 """ Load Packer
 lua require('plugins')
 lua require('keymaps')
