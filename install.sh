@@ -28,13 +28,8 @@ set_variable() {
 }
 
 install_packer() {
-  D="$PACK_START/packer.nvim"
-  if [ -d "$D" ]
-  then
-    printf "\033[0;33mPacker already exists.\033[0m\n"
-    exit 4
-  fi
-  git clone https://github.com/wbthomason/packer.nvim "$D"
+  mkdir -p $HOME/.local/share/nvim/site/pack/packer/start
+  git clone --depth 1 https://github.com/wbthomason/packer.nvim $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
 }
 
 cargo_install() {
