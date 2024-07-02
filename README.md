@@ -30,3 +30,11 @@ git clone https://github.com/JonasGao/nvimrc.git $HOME/.config/nvim
 cd $HOME/.config/nvim
 ./install.sh -p
 ```
+
+If version lower. Install neovim in ubuntu
+
+```shell
+sudo add-apt-repository ppa:neovim-ppa/unstable
+sudo apt-get update
+sudo apt-get install neovim
+```
