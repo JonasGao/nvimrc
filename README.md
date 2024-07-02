@@ -27,4 +27,6 @@ After install vc++ build tools ( or visual studio, containe vc++ build tools ). 
 
 ```shell
 git clone https://github.com/JonasGao/nvimrc.git $HOME/.config/nvim
+cd $HOME/.config/nvim
+./install.sh -p
 ```
