@@ -20,6 +20,15 @@ return require('packer').startup(function(use)
     "folke/which-key.nvim"
   }
 
+  -- File explorer
+  use {
+    "nvim-tree/nvim-tree.lua",
+    requires = {
+      "nvim-tree/nvim-web-devicons",
+      "b0o/nvim-tree-preview.lua",
+    },
+  }
+
   -- LSP and Diagnostic
   use {
     'williamboman/mason.nvim',
