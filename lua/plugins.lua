@@ -26,14 +26,14 @@ return {
   { 'neovim/nvim-lspconfig' },
   { 'j-hui/fidget.nvim' },
   { 'mhartington/formatter.nvim' },
-  { 'folke/trouble.nvim', dependencies = "kyazdani42/nvim-web-devicons" },
-  { 'glepnir/lspsaga.nvim', dependencies = 'nvim-tree/nvim-web-devicons' },
+  { 'folke/trouble.nvim',                  dependencies = "kyazdani42/nvim-web-devicons" },
+  { 'glepnir/lspsaga.nvim',                dependencies = 'nvim-tree/nvim-web-devicons' },
 
   -- Colorschema
   { 'Tsuzat/NeoSolarized.nvim' },
 
   -- Statusline
-  { 'hoob3rt/lualine.nvim', dependencies = 'kyazdani42/nvim-web-devicons' },
+  { 'hoob3rt/lualine.nvim',                dependencies = 'kyazdani42/nvim-web-devicons' },
 
   -- Easy motion
   { 'easymotion/vim-easymotion' },
@@ -53,17 +53,27 @@ return {
   { 'unblevable/quick-scope' },
 
   -- Treesitter more highlight
-   { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
+  { 'nvim-treesitter/nvim-treesitter',     run = ':TSUpdate' },
 
   -- Show indent line
-   { 'lukas-reineke/indent-blankline.nvim', dependencies = 'tjdevries/colorbuddy.nvim' },
+  { 'lukas-reineke/indent-blankline.nvim', dependencies = 'tjdevries/colorbuddy.nvim' },
 
   -- Fuzzy finder
-   { 'nvim-telescope/telescope.nvim', version = '0.1.4', dependencies = 'nvim-lua/plenary.nvim' },
-   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' },
-   { 'nvim-telescope/telescope-file-browser.nvim' },
-   { 'smartpde/telescope-recent-files' },
+  { 'nvim-telescope/telescope.nvim',       version = '0.1.4',                            dependencies = 'nvim-lua/plenary.nvim' },
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build = function(plugin)
+      local obj = vim.system({ 'cmake', '-S.', '-Bbuild', '-DCMAKE_BUILD_TYPE=Release' }, { cwd = plugin.dir }):wait()
+      if obj.code ~= 0 then error(obj.stderr) end
+      obj = vim.system({ 'cmake', '--build', 'build', '--config', 'Release' }, { cwd = plugin.dir }):wait()
+      if obj.code ~= 0 then error(obj.stderr) end
+      obj = vim.system({ 'cmake', '--install', 'build', '--prefix', 'build' }, { cwd = plugin.dir }):wait()
+      if obj.code ~= 0 then error(obj.stderr) end
+    end
+  },
+  { 'nvim-telescope/telescope-file-browser.nvim' },
+  { 'smartpde/telescope-recent-files' },
 
   -- Scrollview
-   { 'dstein64/nvim-scrollview' }
+  { 'dstein64/nvim-scrollview' }
 }
