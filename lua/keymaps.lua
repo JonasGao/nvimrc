@@ -5,10 +5,7 @@ local function map(mode, key, cmd, desc)
 end
 
 map("n", "te", ":tabedit<cr>")
-map("n", "<Space>a", "gg0vG$")
 map("i", "<C-p>d", "<C-r>=system('date')<CR>")
-map("n", "<space>l", ":bn<cr>", "Next Buffer")
-map("n", "<space>h", ":bp<cr>", "Prev Buffer")
 
 local wk = require("which-key")
 wk.add( {
@@ -21,6 +18,7 @@ wk.add( {
     { "<leader>7", "<cmd>b7<cr>", desc = "Buffer 7" },
     { "<leader>8", "<cmd>b8<cr>", desc = "Buffer 8" },
     { "<leader>9", "<cmd>b9<cr>", desc = "Buffer 9" },
+    { "<leader>a", "gg0vG$", desc = "Select all" },
     { "<leader>B", group = "Browser" },
     { "<leader>Br", "<cmd>bro ol<cr>", desc = "Old files" },
     { "<leader>S", "<cmd>source $MYVIMRC<cr>", desc = "Reload rcfile" },

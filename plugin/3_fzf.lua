@@ -1,7 +1,6 @@
 local ready, telescope = pcall(require, "telescope")
 if (not ready) then return end
 
-
 telescope.setup({
   defaults = {
     mappings = {
@@ -63,19 +62,17 @@ local whichkey_ready, whichkey = pcall(require, "which-key")
 if (not whichkey_ready) then return end
 
 local builtin = require('telescope.builtin')
-whichkey.register({
-  f = {
-    name = "Fuzzy Finder",
-    f = { builtin.find_files, "find_files" },
-    g = { builtin.live_grep, "live_grep" },
-    b = { builtin.buffers, "buffers" },
-    h = { builtin.help_tags, "help_tags" },
-    v = { builtin.git_files, "git_files" },
-    c = { builtin.commands, "commands" },
-    H = { builtin.command_history, "command_history" },
-    R = { builtin.registers, "registers" },
-    C = { builtin.colorscheme, "colorscheme" },
-    e = { builtin.oldfiles, "oldfiles" },
-    r = { telescope.extensions.recent_files.pick, "recent_files" },
-  }
-}, { prefix = "<leader>" })
+whichkey.add({
+  { "<leader>f", group = "+File" },
+  { "<leader>ff", builtin.find_files, desc = "find_files" },
+  { "<leader>fg", builtin.live_grep, desc ="live_grep" },
+  { "<leader>fb", builtin.buffers, desc ="buffers" },
+  { "<leader>fh", builtin.help_tags, desc ="help_tags" },
+  { "<leader>fv", builtin.git_files, desc ="git_files" },
+  { "<leader>fc", builtin.commands, desc ="commands" },
+  { "<leader>fH", builtin.command_history, desc ="command_history" },
+  { "<leader>fR", builtin.registers, desc ="registers" },
+  { "<leader>fC", builtin.colorscheme, desc ="colorscheme" },
+  { "<leader>fe", builtin.oldfiles, desc ="oldfiles" },
+  { "<leader>fr", telescope.extensions.recent_files.pick, desc ="recent_files" },
+})
