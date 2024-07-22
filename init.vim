@@ -48,7 +48,7 @@ let &t_ZR="\e[23m"
 runtime env.local.vim
 
 """ Load Packer
-lua require('plugins')
+lua require('config.lazy')
 lua require('keymaps')
 
 """ EasyMotion
