@@ -21,8 +21,44 @@ noice.setup({
 })
 
 local notify_ready, notify = pcall(require, 'notify')
-if (not notify_ready) then return end
+if (not notify_ready) then
+  vim.notify("Not loaded notify plugin", vim.log.levels.ERROR)
+  return
+end
 
 notify.setup({
-  background_colour = "#000000"
+  background_colour = "#000000",
+  fps = 60,
+  icons = {
+    DEBUG = "",
+    ERROR = "",
+    INFO = "",
+    TRACE = "✎",
+    WARN = ""
+  },
+  level = 2,
+  minimum_width = 50,
+  render = "default",
+  stages = "fade_in_slide_out",
+  time_formats = {
+    notification = "%T",
+    notification_history = "%FT%T"
+  },
+  timeout = 2000,
+  top_down = true
+})
+
+local wr, wk = pcall(require, "which-key")
+if (not wr) then return end
+
+wk.add({
+  { "<leader>t",  group = "+Notification" },
+  { "<leader>tn", notify.dismiss,         desc = "Dismiss" },
+})
+
+local tr, ts = pcall(require, "telescope")
+if (not tr) then return end
+
+wk.add({
+  { "<leader>th", ts.extensions.notify.notify, desc = "History" },
 })
