@@ -20,6 +20,7 @@ ts.setup {
     "rust",
     "go",
     "bash",
+    "gitcommit",
   },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
