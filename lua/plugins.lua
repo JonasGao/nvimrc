@@ -81,30 +81,18 @@ return {
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = function(plugin)
-      local do_build = function()
-        local obj = vim.system({ "cmake", "-S.", "-Bbuild", "-DCMAKE_BUILD_TYPE=Release" }, { cwd = plugin.dir })
-            :wait()
-        if obj.code ~= 0 then
-          error(obj.stderr)
-        end
-        obj = vim.system({ "cmake", "--build", "build", "--config", "Release" }, { cwd = plugin.dir }):wait()
-        if obj.code ~= 0 then
-          error(obj.stderr)
-        end
-        obj = vim.system({ "cmake", "--install", "build", "--prefix", "build" }, { cwd = plugin.dir }):wait()
-        if obj.code ~= 0 then
-          error(obj.stderr)
+      local do_build = function (script)
+        local out = vim.fn.system(script .. " " .. plugin.dir)
+        if vim.v.shell_error ~= 0 then
+          vim.notify("Failed to build telescope-fzf-native:\n" .. out, vim.log.levels.ERROR)
         end
       end
       if vim.fn.has('mac') == 1 then
-        do_build()
+        do_build("lib/build_telescope_fzf_native.sh")
       elseif vim.fn.has('win32') == 1 then
-        local obj = vim.system({ "cmake", "-S.", "-Bbuild", "-DCMAKE_BUILD_TYPE=Release" }, { cwd = plugin.dir }):wait()
-        if obj.code ~= 0 then
-          error(obj.stderr)
-        end
+        do_build("pwsh lib/build_telescope_fzf_native.ps1")
       elseif vim.fn.has('unix') == 1 then
-        do_build()
+        do_build("lib/build_telescope_fzf_native.sh")
       end
     end,
   },
