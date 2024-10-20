@@ -8,8 +8,17 @@ My Neovim rcfiles
 Install neovim first:
 
 ```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 scoop bucket add main
 scoop install neovim
+```
+
+Or without scoope
+
+```powershell
+$v = curl -L -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/neovim/neovim/tags?per_page=1 | ConvertFrom-Json | Select -ExpandProperty name
+curl -Lo nvim-win64.zip "https://github.com/neovim/neovim/releases/download/$v/nvim-win64.zip"
 ```
 
 Install rcfiles.
