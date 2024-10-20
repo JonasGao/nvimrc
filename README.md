@@ -16,6 +16,7 @@ Install rcfiles.
 
 ```powershell
 git clone https://github.com/JonasGao/nvimrc.git "$env:LOCALAPPDATA\nvim"
+# git clone git@github.com:JonasGao/nvimrc.git "$env:LOCALAPPDATA\nvim"
 cd "$env:LOCALAPPDATA\nvim"
 .\install.ps1
 ```
@@ -27,6 +28,7 @@ After install vc++ build tools ( or visual studio, containe vc++ build tools ). 
 
 ```shell
 git clone https://github.com/JonasGao/nvimrc.git $HOME/.config/nvim
+# git clone git@github.com:JonasGao/nvimrc.git $HOME/.config/nvim
 cd $HOME/.config/nvim
 ./install.sh -p
 ```
