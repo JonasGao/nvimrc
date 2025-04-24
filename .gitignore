@@ -2,3 +2,4 @@ plugin/packer_compiled.lua
 pack
 env.local.vim
 lazy-lock.json
+*.log

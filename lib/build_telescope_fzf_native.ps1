@@ -6,5 +6,6 @@ Write-Output "PWD: $(Get-Location)" > $LOG
 cmake "-S." "-Bbuild" "-DCMAKE_BUILD_TYPE=Release" >> $LOG && cmake "--build" build "--config" Release >> $LOG
 if (Test-Path "$WDIR\build\Release\libfzf.dll" -PathType Leaf)
 {
+	Write-Output "Moving libfzf.dll" > $LOG
 	Move-Item -Force "$WDIR\build\Release\libfzf.dll" "$WDIR\build\"
 }

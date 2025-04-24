@@ -1,19 +1,3 @@
-param(
-  [switch]$BuildFzf
-)
-
-function Install-Packer
-{
-  $D = "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
-  if (Test-Path $D)
-  {
-    Write-Output "'Packer' is already exists"
-    return
-  }
-  git clone https://github.com/wbthomason/packer.nvim $D
-  Write-Output "'Packer' was cloned successfully"
-}
-
 function Install-Dependency
 {
   if (-not (Get-Command scoop))
@@ -46,23 +30,4 @@ function Install-Dependency
   # linux or unix, use "curl https://sh.rustup.rs -sSf | sh"
 }
 
-function Build-TelescopeFzfNative
-{
-
-  Push-Location "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\telescope-fzf-native.nvim\"
-  try {
-    cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build
-  } finally
-  {
-    Pop-Location
-  }
-}
-
-if ($BuildFzf)
-{
-  Build-TelescopeFzfNative
-  return
-}
-
-Install-Packer
 Install-Dependency
