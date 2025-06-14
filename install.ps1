@@ -35,22 +35,44 @@ function Install-Dependency
     Write-Host "npm 已安装。"
   }
 
-  # 安装 tree-sitter-cli（npm 方式）
-  if (-not (Get-Command tree-sitter -ErrorAction SilentlyContinue)) {
-    Write-Host "正在通过 npm 安装 tree-sitter-cli ..."
-    npm install -g tree-sitter-cli
+  Install-TreeSitter
+}
+
+function Install-TreeSitter {
+  # 安装 tree-sitter-cli（GitHub 方式）
+  $treeSitterUrl = "https://github.com/tree-sitter/tree-sitter/releases/download/latest/tree-sitter-windows-x64.gz"
+  $treeSitterDir = "$HOME/bin"
+  $treeSitterExe = "$treeSitterDir/tree-sitter.exe"
+
+  # 检查代理环境变量
+  $proxy = $env:HTTPS_PROXY
+  if (-not $proxy) { $proxy = $env:HTTP_PROXY }
+
+  if (-not (Test-Path $treeSitterExe)) {
+    Write-Host "正在从 GitHub 下载 tree-sitter-cli ..."
+    if (-not (Test-Path $treeSitterDir)) {
+      New-Item -ItemType Directory -Path $treeSitterDir | Out-Null
+    }
+    $zipPath = "$treeSitterDir/tree-sitter.zip"
+    if ($proxy) {
+      Invoke-WebRequest -Uri $treeSitterUrl -OutFile $zipPath -Proxy $proxy
+    } else {
+      Invoke-WebRequest -Uri $treeSitterUrl -OutFile $zipPath
+    }
+    Write-Host "正在解压 tree-sitter-cli ..."
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipPath, $treeSitterDir)
+    Remove-Item $zipPath
+    Write-Host "tree-sitter-cli 已下载并解压到 $treeSitterDir"
+    # 自动将 $treeSitterDir 添加到账户 PATH 环境变量
+    $userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+    if ($userPath -notlike "*$treeSitterDir*") {
+      [Environment]::SetEnvironmentVariable("PATH", "$userPath;$treeSitterDir", "User")
+      Write-Host "$treeSitterDir 已添加到账户 PATH 环境变量。请重新打开终端以生效。"
+    }
   } else {
     Write-Host "tree-sitter-cli 已安装。"
   }
-
-  # cargo 安装 tree-sitter-cli（可选）
-  # if (-not (Get-Command cargo -ErrorAction SilentlyContinue)) {
-  #   Write-Host "请手动安装 Rust/cargo: https://win.rustup.rs/x86_64"
-  # } else {
-  #   if (-not (Get-Command tree-sitter -ErrorAction SilentlyContinue)) {
-  #     cargo install tree-sitter-cli
-  #   }
-  # }
 }
 
 Install-Dependency
