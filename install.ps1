@@ -39,8 +39,8 @@ function Install-Dependency
 }
 
 function Install-TreeSitter {
-  # 安装 tree-sitter-cli（GitHub 方式）
-  $treeSitterUrl = "https://github.com/tree-sitter/tree-sitter/releases/download/latest/tree-sitter-windows-x64.gz"
+  # 使用 GitHub API 获取最新发布版本
+  $apiUrl = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/latest"
   $treeSitterDir = "$HOME/bin"
   $treeSitterExe = "$treeSitterDir/tree-sitter.exe"
 
@@ -49,26 +49,58 @@ function Install-TreeSitter {
   if (-not $proxy) { $proxy = $env:HTTP_PROXY }
 
   if (-not (Test-Path $treeSitterExe)) {
-    Write-Host "正在从 GitHub 下载 tree-sitter-cli ..."
-    if (-not (Test-Path $treeSitterDir)) {
-      New-Item -ItemType Directory -Path $treeSitterDir | Out-Null
-    }
-    $zipPath = "$treeSitterDir/tree-sitter.zip"
-    if ($proxy) {
-      Invoke-WebRequest -Uri $treeSitterUrl -OutFile $zipPath -Proxy $proxy
-    } else {
-      Invoke-WebRequest -Uri $treeSitterUrl -OutFile $zipPath
-    }
-    Write-Host "正在解压 tree-sitter-cli ..."
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipPath, $treeSitterDir)
-    Remove-Item $zipPath
-    Write-Host "tree-sitter-cli 已下载并解压到 $treeSitterDir"
-    # 自动将 $treeSitterDir 添加到账户 PATH 环境变量
-    $userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
-    if ($userPath -notlike "*$treeSitterDir*") {
-      [Environment]::SetEnvironmentVariable("PATH", "$userPath;$treeSitterDir", "User")
-      Write-Host "$treeSitterDir 已添加到账户 PATH 环境变量。请重新打开终端以生效。"
+    Write-Host "正在从 GitHub 获取最新发布版本信息..."
+    try {
+      $headers = @{
+        "Accept" = "application/vnd.github.v3+json"
+        "User-Agent" = "PowerShell"
+      }
+      if ($proxy) {
+        $releaseInfo = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Proxy $proxy
+      } else {
+        $releaseInfo = Invoke-RestMethod -Uri $apiUrl -Headers $headers
+      }
+      
+      # 查找 Windows x64 版本的资源
+      $treeSitterAsset = $releaseInfo.assets | Where-Object { $_.name -like "*tree-sitter-windows-x64*" }
+      if (-not $treeSitterAsset) {
+        throw "未找到 Windows x64 版本的 tree-sitter"
+      }
+      $treeSitterUrl = $treeSitterAsset.browser_download_url
+      
+      Write-Host "正在下载 tree-sitter-cli (版本: $($releaseInfo.tag_name))..."
+      if (-not (Test-Path $treeSitterDir)) {
+        New-Item -ItemType Directory -Path $treeSitterDir | Out-Null
+      }
+      $gzPath = "$treeSitterDir/tree-sitter.gz"
+      if ($proxy) {
+        Invoke-WebRequest -Uri $treeSitterUrl -OutFile $gzPath -Proxy $proxy
+      } else {
+        Invoke-WebRequest -Uri $treeSitterUrl -OutFile $gzPath
+      }
+      Write-Host "正在解压 tree-sitter-cli ..."
+      
+      # 使用 gzip 解压
+      $gzipStream = New-Object System.IO.Compression.GZipStream(
+        [System.IO.File]::OpenRead($gzPath),
+        [System.IO.Compression.CompressionMode]::Decompress
+      )
+      $outputFile = [System.IO.File]::Create($treeSitterExe)
+      $gzipStream.CopyTo($outputFile)
+      $outputFile.Close()
+      $gzipStream.Close()
+      
+      Remove-Item $gzPath
+      Write-Host "tree-sitter-cli 已下载并解压到 $treeSitterDir"
+      # 自动将 $treeSitterDir 添加到账户 PATH 环境变量
+      $userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+      if ($userPath -notlike "*$treeSitterDir*") {
+        [Environment]::SetEnvironmentVariable("PATH", "$userPath;$treeSitterDir", "User")
+        Write-Host "$treeSitterDir 已添加到账户 PATH 环境变量。请重新打开终端以生效。"
+      }
+    } catch {
+      Write-Host "获取或下载 tree-sitter 失败: $_"
+      return
     }
   } else {
     Write-Host "tree-sitter-cli 已安装。"
