@@ -17,7 +17,7 @@ function Install-Dependency
   }
 
   # 需要安装的软件列表
-  $apps = @("cmake", "bat", "ripgrep", "fd", "gcc")
+  $apps = @("cmake", "bat", "ripgrep", "fd", "gcc", "aria2")
   foreach ($app in $apps) {
     if (-not (scoop list $app | Select-String $app)) {
       Write-Host "正在安装 $app ..."
@@ -48,6 +48,15 @@ function Install-TreeSitter {
   $proxy = $env:HTTPS_PROXY
   if (-not $proxy) { $proxy = $env:HTTP_PROXY }
 
+  # 清理旧的 tree-sitter.exe 和 tree-sitter.gz
+  if (Test-Path $treeSitterExe) {
+    Remove-Item $treeSitterExe -Force
+  }
+  $gzFullPath = Join-Path $treeSitterDir $gzPath
+  if (Test-Path $gzFullPath) {
+    Remove-Item $gzFullPath -Force
+  }
+
   if (-not (Test-Path $treeSitterExe)) {
     Write-Host "正在从 GitHub 获取最新发布版本信息..."
     try {
@@ -68,21 +77,25 @@ function Install-TreeSitter {
       }
       $treeSitterUrl = $treeSitterAsset.browser_download_url
       
-      Write-Host "正在下载 tree-sitter-cli (版本: $($releaseInfo.tag_name))..."
       if (-not (Test-Path $treeSitterDir)) {
         New-Item -ItemType Directory -Path $treeSitterDir | Out-Null
       }
-      $gzPath = "$treeSitterDir/tree-sitter.gz"
+      $gzPath = "tree-sitter.gz"
+
+      Write-Host "正在下载 tree-sitter-cli (版本: $($releaseInfo.tag_name))"
       if ($proxy) {
-        Invoke-WebRequest -Uri $treeSitterUrl -OutFile $gzPath -Proxy $proxy
+        Write-Host "使用代理: $proxy"
+        aria2c $treeSitterUrl -o $gzPath --dir=$treeSitterDir --all-proxy=$proxy
+        if ($LASTEXITCODE -ne 0) { throw "aria2c 下载失败" }
       } else {
-        Invoke-WebRequest -Uri $treeSitterUrl -OutFile $gzPath
+        aria2c $treeSitterUrl -o $gzPath --dir=$treeSitterDir
+        if ($LASTEXITCODE -ne 0) { throw "aria2c 下载失败" }
       }
       Write-Host "正在解压 tree-sitter-cli ..."
       
       # 使用 gzip 解压
       $gzipStream = New-Object System.IO.Compression.GZipStream(
-        [System.IO.File]::OpenRead($gzPath),
+        [System.IO.File]::OpenRead($(Join-Path $treeSitterDir $gzPath)),
         [System.IO.Compression.CompressionMode]::Decompress
       )
       $outputFile = [System.IO.File]::Create($treeSitterExe)
