@@ -75,68 +75,68 @@ local on_attach = function(client, bufnr)
   buf_map('n', '<space>R', vim.lsp.buf.rename)
 end
 
-mason.setup_handlers {
-  -- The first entry (without a key) will be the default handler
-  -- and will be called for each installed server that doesn't have
-  -- a dedicated handler.
-  function(server_name) -- default handler (optional)
-    lspconfig[server_name].setup {
-      on_attach = on_attach,
-      flags = lsp_flags,
-      capabilities = capabilities,
-    }
-  end,
-  -- Next, you can provide a dedicated handler for specific servers.
-  -- For example, a handler override for the `rust_analyzer`:
-  ["rust_analyzer"] = function()
-    require("rust-tools").setup {}
-  end,
-  ["lua_ls"] = function()
-    lspconfig.lua_ls.setup {
-      on_attach = on_attach,
-      flags = lsp_flags,
-      capabilities = capabilities,
-      settings = {
-        Lua = {
-          runtime = {
-            -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-            version = 'LuaJIT',
-          },
-          diagnostics = {
-            -- Get the language server to recognize the `vim` global
-            globals = { 'vim' },
-          },
-          workspace = {
-            -- Make the server aware of Neovim runtime files
-            library = vim.api.nvim_get_runtime_file("", true),
-            checkThirdParty = false
-          },
-          -- Do not send telemetry data containing a randomized but unique identifier
-          telemetry = {
-            enable = false,
-          },
-        },
-      },
-    }
-  end,
-  ["yamlls"] = function()
-    lspconfig.yamlls.setup {
-      on_attach = function(client, bufnr)
-        client.server_capabilities.documentFormattingProvider = true
-        on_attach(client, bufnr)
-      end,
-      flags = lsp_flags,
-      capabilities = capabilities,
-      settings = {
-        yaml = {
-          format = {
-            enable = true
-          },
-          schemaStore = {
-            enable = true
-          }
-        }
-      }
-    }
-  end,
-}
+-- mason.setup_handlers {
+--   -- The first entry (without a key) will be the default handler
+--   -- and will be called for each installed server that doesn't have
+--   -- a dedicated handler.
+--   function(server_name) -- default handler (optional)
+--     lspconfig[server_name].setup {
+--       on_attach = on_attach,
+--       flags = lsp_flags,
+--       capabilities = capabilities,
+--     }
+--   end,
+--   -- Next, you can provide a dedicated handler for specific servers.
+--   -- For example, a handler override for the `rust_analyzer`:
+--   ["rust_analyzer"] = function()
+--     require("rust-tools").setup {}
+--   end,
+--   ["lua_ls"] = function()
+--     lspconfig.lua_ls.setup {
+--       on_attach = on_attach,
+--       flags = lsp_flags,
+--       capabilities = capabilities,
+--       settings = {
+--         Lua = {
+--           runtime = {
+--             -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+--             version = 'LuaJIT',
+--           },
+--           diagnostics = {
+--             -- Get the language server to recognize the `vim` global
+--             globals = { 'vim' },
+--           },
+--           workspace = {
+--             -- Make the server aware of Neovim runtime files
+--             library = vim.api.nvim_get_runtime_file("", true),
+--             checkThirdParty = false
+--           },
+--           -- Do not send telemetry data containing a randomized but unique identifier
+--           telemetry = {
+--             enable = false,
+--           },
+--         },
+--       },
+--     }
+--   end,
+--   ["yamlls"] = function()
+--     lspconfig.yamlls.setup {
+--       on_attach = function(client, bufnr)
+--         client.server_capabilities.documentFormattingProvider = true
+--         on_attach(client, bufnr)
+--       end,
+--       flags = lsp_flags,
+--       capabilities = capabilities,
+--       settings = {
+--         yaml = {
+--           format = {
+--             enable = true
+--           },
+--           schemaStore = {
+--             enable = true
+--           }
+--         }
+--       }
+--     }
+--   end,
+-- }
