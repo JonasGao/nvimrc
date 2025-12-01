@@ -11,4 +11,10 @@ mason.setup({
     download_url_template = url_template
   }
 })
-mason_lspconfig.setup()
+
+mason_lspconfig.setup({
+  ensure_installed = {
+    "powershell_es",
+  },
+  automatic_installation = true,
+})

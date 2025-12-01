@@ -1,5 +1,6 @@
 local lspconfig = require 'lspconfig'
 local mason = require("mason-lspconfig")
+local mason_registry = require("mason-registry")
 
 require('vim.lsp.protocol')
 
@@ -75,68 +76,38 @@ local on_attach = function(client, bufnr)
   buf_map('n', '<space>R', vim.lsp.buf.rename)
 end
 
--- mason.setup_handlers {
---   -- The first entry (without a key) will be the default handler
---   -- and will be called for each installed server that doesn't have
---   -- a dedicated handler.
---   function(server_name) -- default handler (optional)
---     lspconfig[server_name].setup {
---       on_attach = on_attach,
---       flags = lsp_flags,
---       capabilities = capabilities,
---     }
---   end,
---   -- Next, you can provide a dedicated handler for specific servers.
---   -- For example, a handler override for the `rust_analyzer`:
---   ["rust_analyzer"] = function()
---     require("rust-tools").setup {}
---   end,
---   ["lua_ls"] = function()
---     lspconfig.lua_ls.setup {
---       on_attach = on_attach,
---       flags = lsp_flags,
---       capabilities = capabilities,
---       settings = {
---         Lua = {
---           runtime = {
---             -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
---             version = 'LuaJIT',
---           },
---           diagnostics = {
---             -- Get the language server to recognize the `vim` global
---             globals = { 'vim' },
---           },
---           workspace = {
---             -- Make the server aware of Neovim runtime files
---             library = vim.api.nvim_get_runtime_file("", true),
---             checkThirdParty = false
---           },
---           -- Do not send telemetry data containing a randomized but unique identifier
---           telemetry = {
---             enable = false,
---           },
---         },
---       },
---     }
---   end,
---   ["yamlls"] = function()
---     lspconfig.yamlls.setup {
---       on_attach = function(client, bufnr)
---         client.server_capabilities.documentFormattingProvider = true
---         on_attach(client, bufnr)
---       end,
---       flags = lsp_flags,
---       capabilities = capabilities,
---       settings = {
---         yaml = {
---           format = {
---             enable = true
---           },
---           schemaStore = {
---             enable = true
---           }
---         }
---       }
---     }
---   end,
--- }
+mason.setup_handlers {
+  function(server_name)
+    lspconfig[server_name].setup {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+    }
+  end,
+  ["powershell_es"] = function()
+    local ok, ps_pkg = pcall(mason_registry.get_package, "powershell-editor-services")
+    if not ok then
+      vim.notify("powershell-editor-services not found in Mason: " .. tostring(ps_pkg), vim.log.levels.WARN)
+      return
+    end
+
+    local install_path = ps_pkg:get_install_path()
+    local bundle_path = install_path .. "/PowerShellEditorServices"
+    local shell = vim.fn.has("win32") == 1 and "pwsh.exe" or "pwsh"
+
+    lspconfig.powershell_es.setup {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      bundle_path = bundle_path,
+      shell = shell,
+      settings = {
+        powershell = {
+          codeFormatting = {
+            Preset = "OTBS",
+          },
+        },
+      },
+    }
+  end,
+}

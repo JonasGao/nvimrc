@@ -5,6 +5,20 @@ end
 
 local util = require("formatter.util")
 
+local function powershell_formatter()
+  local shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell"
+  return {
+    exe = shell,
+    args = {
+      "-NoLogo",
+      "-NoProfile",
+      "-Command",
+      [[Invoke-Formatter -ScriptDefinition ([Console]::In.ReadToEnd())]],
+    },
+    stdin = true,
+  }
+end
+
 -- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
 formatter.setup({
   -- Enable or disable logging
@@ -47,6 +61,12 @@ formatter.setup({
     },
     yaml = {
       require("formatter.filetypes.yaml").prettier,
+    },
+    ps1 = {
+      powershell_formatter,
+    },
+    powershell = {
+      powershell_formatter,
     },
 
     -- Use the special "*" filetype for defining formatter configurations on
