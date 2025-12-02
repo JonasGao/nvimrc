@@ -4,16 +4,41 @@ if not ready then
 end
 
 local util = require("formatter.util")
+local mason_registry_ready, mason_registry = pcall(require, "mason-registry")
+local warned_missing_pses = false
 
 local function powershell_formatter()
+  if not mason_registry_ready then
+    if not warned_missing_pses then
+      vim.notify("formatter: mason-registry not available; skip PowerShell formatting", vim.log.levels.WARN)
+      warned_missing_pses = true
+    end
+    return nil
+  end
+
+  local ok, ps_pkg = pcall(mason_registry.get_package, "powershell-editor-services")
+  if not ok then
+    if not warned_missing_pses then
+      vim.notify("formatter: powershell-editor-services is not installed via Mason", vim.log.levels.WARN)
+      warned_missing_pses = true
+    end
+    return nil
+  end
+
   local shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell"
+  local module_path = ps_pkg:get_install_path() .. "/PowerShellEditorServices/PowerShellEditorServices.psd1"
+  local command = string.format(
+    "Import-Module '%s'; Invoke-Formatter -ScriptDefinition ([Console]::In.ReadToEnd())",
+    module_path
+  )
+
   return {
     exe = shell,
     args = {
       "-NoLogo",
       "-NoProfile",
       "-Command",
-      [[Invoke-Formatter -ScriptDefinition ([Console]::In.ReadToEnd())]],
+      command,
     },
     stdin = true,
   }
