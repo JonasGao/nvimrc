@@ -1,7 +1,3 @@
-local lspconfig = require 'lspconfig'
-local mason = require("mason-lspconfig")
-local mason_registry = require("mason-registry")
-
 require('vim.lsp.protocol')
 
 vim.diagnostic.config({
@@ -76,38 +72,5 @@ local on_attach = function(client, bufnr)
   buf_map('n', '<space>R', vim.lsp.buf.rename)
 end
 
-mason.setup_handlers {
-  function(server_name)
-    lspconfig[server_name].setup {
-      on_attach = on_attach,
-      flags = lsp_flags,
-      capabilities = capabilities,
-    }
-  end,
-  ["powershell_es"] = function()
-    local ok, ps_pkg = pcall(mason_registry.get_package, "powershell-editor-services")
-    if not ok then
-      vim.notify("powershell-editor-services not found in Mason: " .. tostring(ps_pkg), vim.log.levels.WARN)
-      return
-    end
-
-    local install_path = ps_pkg:get_install_path()
-    local bundle_path = install_path .. "/PowerShellEditorServices"
-    local shell = vim.fn.has("win32") == 1 and "pwsh.exe" or "pwsh"
-
-    lspconfig.powershell_es.setup {
-      on_attach = on_attach,
-      flags = lsp_flags,
-      capabilities = capabilities,
-      bundle_path = bundle_path,
-      shell = shell,
-      settings = {
-        powershell = {
-          codeFormatting = {
-            Preset = "OTBS",
-          },
-        },
-      },
-    }
-  end,
-}
+-- Setup LSP servers using vim.lsp.config (Neovim 0.11+)
+vim.lsp.enable('powershell_es')

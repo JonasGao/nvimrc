@@ -35,9 +35,13 @@ return {
   },
 
   -- LSP and Diagnostic
-  { "williamboman/mason.nvim" },
-  { "williamboman/mason-lspconfig.nvim" },
-  { "neovim/nvim-lspconfig" },
+  { 
+    "mason-org/mason-lspconfig.nvim",
+    dependencies = {
+      { "mason-org/mason.nvim", opts = {} },
+      { "neovim/nvim-lspconfig" }
+    }
+  },
   { "j-hui/fidget.nvim" },
   { "mhartington/formatter.nvim" },
   { "folke/trouble.nvim",                  dependencies = "kyazdani42/nvim-web-devicons" },
@@ -60,8 +64,6 @@ return {
   { "hrsh7th/nvim-cmp" },
   { "hrsh7th/cmp-nvim-lsp" },
   { "hrsh7th/cmp-buffer" },
-  { "saadparwaiz1/cmp_luasnip" }, -- Snippets source for nvim-cmp
-  { "L3MON4D3/LuaSnip" },         -- Snippets plugin
 
   -- Quick Scope
   { "unblevable/quick-scope" },
