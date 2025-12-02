@@ -1,5 +1,4 @@
-require('vim.lsp.protocol')
-
+-- Configure diagnostic settings (global)
 vim.diagnostic.config({
   update_in_insert = true,
   float = {
@@ -7,70 +6,73 @@ vim.diagnostic.config({
   }
 })
 
-local lsp_flags = {
-  -- This is the default in Nvim 0.7+
-  debounce_text_changes = 150,
-}
-
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- Lsp Setup attact
+-- On attach function to configure LSP features and keymaps
 local on_attach = function(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  -- Set omnifunc for LSP completion
+  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-  -- formatting
-  -- this will be update reference project 'lspconfig'
+  -- Setup formatting on save if supported
   if client.server_capabilities.documentFormattingProvider then
-    local api = vim.api
-    local augroup = api.nvim_create_augroup("LspFormatting", {})
-    api.nvim_create_autocmd("BufWritePre", {
+    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+    vim.api.nvim_create_autocmd("BufWritePre", {
       group = augroup,
       buffer = bufnr,
       callback = function()
         vim.lsp.buf.format()
       end
     })
-    -- api.nvim_command [[augroup Format]]
-    -- api.nvim_command [[autocmd! * <buffer>]]
-    -- api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
-    -- api.nvim_command [[augroup END]]
   end
 
+  -- Helper function for mapping global keymaps
   local function map(mode, key, cmd, desc)
-    local o = { noremap = true, silent = true, desc = desc }
-    vim.keymap.set(mode, key, cmd, o)
+    local opts = { noremap = true, silent = true, desc = desc }
+    vim.keymap.set(mode, key, cmd, opts)
   end
 
-  map('n', '<space>e', vim.diagnostic.open_float, "diagnostic.open_float")
-  map('n', '[d', vim.diagnostic.goto_prev, "Prev Problom")
-  map('n', ']d', vim.diagnostic.goto_next, "Next Problom")
-  map('n', '<space>q', vim.diagnostic.setloclist, "diagnostic.setloclist")
+  -- Global diagnostic keymaps
+  map('n', '<space>e', vim.diagnostic.open_float, "Show diagnostic float")
+  map('n', '[d', vim.diagnostic.goto_prev, "Go to previous diagnostic")
+  map('n', ']d', vim.diagnostic.goto_next, "Go to next diagnostic")
+  map('n', '<space>q', vim.diagnostic.setloclist, "Add diagnostics to loclist")
 
+  -- Helper function for mapping buffer-local keymaps
   local function buf_map(mode, key, cmd, desc)
-    local o = { noremap = true, silent = true, desc = desc, buffer = bufnr }
-    vim.keymap.set(mode, key, cmd, o)
+    local opts = { noremap = true, silent = true, desc = desc, buffer = bufnr }
+    vim.keymap.set(mode, key, cmd, opts)
   end
 
-  buf_map('n', '<space>b', vim.lsp.buf.definition, "Goto Definition")
-  buf_map('n', '<space><C-b>', vim.lsp.buf.declaration, "Goto Declaration")
-  buf_map('n', '<space>B', vim.lsp.buf.implementation, "Goto Implementation")
-  buf_map('n', '<space>D', vim.lsp.buf.type_definition, "Goto Type Definition")
-  buf_map('n', '<space>r', vim.lsp.buf.references, "References")
-  buf_map('n', '<space>f', function() vim.lsp.buf.format { async = true } end, "Format")
-  buf_map('n', '<space>c', vim.lsp.buf.code_action, "Code action")
-
-  -- Instead by lspsaga
-  -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
-  -- vim.keymap.set('n', 'K', vim.lsp.buf.hover)
-  buf_map('n', '<C-k>', vim.lsp.buf.signature_help)
-  buf_map('n', '<space>wa', vim.lsp.buf.add_workspace_folder)
-  buf_map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder)
+  -- Buffer-local LSP keymaps
+  buf_map('n', '<space>b', vim.lsp.buf.definition, "Go to definition")
+  buf_map('n', '<space><C-b>', vim.lsp.buf.declaration, "Go to declaration")
+  buf_map('n', '<space>B', vim.lsp.buf.implementation, "Go to implementation")
+  buf_map('n', '<space>D', vim.lsp.buf.type_definition, "Go to type definition")
+  buf_map('n', '<space>r', vim.lsp.buf.references, "Show references")
+  buf_map('n', '<space>f', function() vim.lsp.buf.format { async = true } end, "Format buffer")
+  buf_map('n', '<space>c', vim.lsp.buf.code_action, "Show code actions")
+  buf_map('n', '<C-k>', vim.lsp.buf.signature_help, "Show signature help")
+  buf_map('n', '<space>wa', vim.lsp.buf.add_workspace_folder, "Add workspace folder")
+  buf_map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
   buf_map('n', '<space>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end)
-  buf_map('n', '<space>R', vim.lsp.buf.rename)
+  end, "List workspace folders")
+  buf_map('n', '<space>R', vim.lsp.buf.rename, "Rename symbol")
+  
+  -- Add hover documentation (if not already set by lspsaga)
+  buf_map('n', 'K', vim.lsp.buf.hover, "Show hover documentation")
 end
 
--- Setup LSP servers using vim.lsp.config (Neovim 0.11+)
+-- PowerShell Editor Services configuration using Neovim 0.11+ vim.lsp.config
+vim.lsp.config('powershell_es', {
+
+  -- LSP capabilities
+  capabilities = capabilities,
+  
+  -- On attach callback for setting up keymaps and features
+  on_attach = on_attach,
+})
+
+-- Enable the PowerShell LSP server
 vim.lsp.enable('powershell_es')
