@@ -14,14 +14,8 @@ whichkey.setup {
       text_objects = true,
     },
   },
-  hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "^call ", "^lua ", "^:", "^ " },
-  triggers_blacklist = {
-    -- list of mode / prefixes that should never be hooked by WhichKey
-    -- this is mostly relevant for key maps that start with a native binding
-    -- most people should not need to change this
-    i = { "j", "k" },
-    v = { "j", "k" },
-  },
+  -- deprecated
+  -- hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "^call ", "^lua ", "^:", "^ " },
   show_help = true,
   show_keys = true,
   -- disable the WhichKey popup for certain buf types and file types.
